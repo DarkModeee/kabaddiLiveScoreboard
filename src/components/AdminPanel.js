@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BsPersonFill } from "react-icons/bs";
@@ -11,7 +11,7 @@ const AdminPanel = () => {
   const [time, setTime] = useState(1200);
   const [timerRunning, setTimerRunning] = useState(false);
 
-  let interval;
+  const intervalRef = useRef(null); // useRef to store the interval
 
   const handleSetTeams = async () => {
     try {
@@ -73,14 +73,14 @@ const AdminPanel = () => {
 
   useEffect(() => {
     if (timerRunning) {
-      interval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setTime((prevTime) => prevTime - 1);
       }, 1000);
     } else {
-      clearInterval(interval);
+      clearInterval(intervalRef.current);
     }
 
-    return () => clearInterval(interval);
+    return () => clearInterval(intervalRef.current); // Cleanup on unmount or when timerRunning changes
   }, [timerRunning]);
 
   return (
