@@ -1,0 +1,125 @@
+.container {
+  background-color: transparent;
+}
+
+/* Scoreboard Grid */
+.scoreboard-container {
+  display: grid;
+  grid-template-columns: 5fr 2fr 5fr;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.team-box {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: blue;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+}
+
+.team-box .badge {
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  font-size: 1.2rem;
+  padding: 5px 15px;
+  margin-left: 135px;
+}
+
+.timer {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Player Icons Section */
+.players-section {
+  display: grid;
+  grid-template-columns: 5fr 2fr 5fr;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  margin-left: 272px;
+  margin-top: 2px;
+}
+
+/* Separate containers for left and right players */
+.players-container-1,
+.players-container-2 {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem; /* Compact spacing */
+  flex-grow: 1;
+  min-height: 50px;
+  margin-top: -10px;
+}
+
+.players-container-2 {
+  margin-left: 204px;
+}
+
+.player-icon {
+  font-size: 28px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.player-icon.active {
+  color: darkgray;
+  padding: 3px;
+  border: 3px solid gray;
+  border-radius: 50%;
+}
+
+.player-icon.inactive {
+  color: red;
+}
+
+/* 🌟 Responsive Design */
+@media (max-width: 768px) {
+  .scoreboard-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 5px;
+  }
+
+  .team-box {
+    font-size: 1.2rem;
+    padding: 8px 12px;
+  }
+
+  .team-box .badge {
+    font-size: 1rem;
+    padding: 4px 10px;
+    margin-left: 10px;
+  }
+
+  .timer {
+    font-size: 1.3rem;
+  }
+
+  .players-section {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+    gap: 10px;
+  }
+
+  .players-container-1,
+  .players-container-2 {
+    gap: 0.5rem;
+    margin-left: 0;
+  }
+
+  .player-icon {
+    font-size: 24px; /* Slightly smaller for mobile */
+  }
+}
