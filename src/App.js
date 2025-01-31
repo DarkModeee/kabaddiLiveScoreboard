@@ -1,24 +1,40 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import AdminPanel from "./components/AdminPanel";
 import UserPanel from "./components/UserPanel";
 
 const App = () => {
   return (
     <Router>
-      <Routes>
-        {/* Route for Admin Panel */}
-        <Route path="/admin" element={<AdminPanel />} />
+      <div>
+        {/* Navigation Links */}
+        <nav>
+          <ul>
+            <li>
+              <Link to="/user">User Panel</Link>
+            </li>
+            <li>
+              <Link to="/admin">Admin Panel</Link>
+            </li>
+          </ul>
+        </nav>
 
-        {/* Route for User Panel */}
-        <Route path="/user" element={<UserPanel />} />
+        {/* Define Routes */}
+        <Routes>
+          {/* Route for Admin Panel */}
+          <Route path="/admin" element={<AdminPanel />} />
 
-        {/* Default Route (optional) */}
-        <Route path="/" element={<UserPanel />} />
-      </Routes>
+          {/* Route for User Panel */}
+          <Route path="/user" element={<UserPanel />} />
+
+          {/* Default Route */}
+          <Route path="/" element={<UserPanel />} />
+        </Routes>
+      </div>
     </Router>
   );
 };
 
 export default App;
+
 
