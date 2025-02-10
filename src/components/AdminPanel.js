@@ -15,7 +15,7 @@ const AdminPanel = () => {
 
   const handleSetTeams = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/scoreboard/set-teams", null, {
+      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/set-teams", null, {
         params: { team1, team2 },
       });
       setScores(response.data.scores);
@@ -27,7 +27,7 @@ const AdminPanel = () => {
 
   const handleUpdateScore = async (team, delta) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/scoreboard/update-score", null, {
+      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/update-score", null, {
         params: { team, delta },
       });
       setScores(response.data);
@@ -38,7 +38,7 @@ const AdminPanel = () => {
 
   const togglePlayerStatus = async (team, index) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/scoreboard/toggle-player", null, {
+      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/toggle-player", null, {
         params: { team, index },
       });
       setPlayers(response.data.players);  // Sync player state with backend
@@ -53,7 +53,7 @@ const AdminPanel = () => {
 
   const setTimer = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/scoreboard/set-timer", null, {
+      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/set-timer", null, {
         params: { minutes: time / 60 },
       });
       setTime(response.data.matchTime);
@@ -64,7 +64,7 @@ const AdminPanel = () => {
 
   const toggleTimer = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/scoreboard/toggle-timer");
+      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/toggle-timer");
       setTimerRunning(response.data.timerRunning);
     } catch (error) {
       alert("Error toggling timer: " + error.message); // Show user-friendly error

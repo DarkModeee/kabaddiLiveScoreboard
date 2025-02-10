@@ -28,7 +28,7 @@ const App = () => {
           <Route path="/user" element={<UserPanel />} />
 
           {/* Default Route */}
-          <Route path="/" element={<UserPanel />} />
+          <Route path="/" />
         </Routes>
       </div>
     </Router>
