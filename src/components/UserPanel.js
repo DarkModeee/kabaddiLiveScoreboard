@@ -17,43 +17,37 @@ const UserPanel = () => {
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: (str) => console.log(str),
+      reconnectDelay: 5000, // Retry connection every 5s
+      heartbeatIncoming: 4000, // Check if server is alive
+      heartbeatOutgoing: 4000,
       onConnect: () => {
         console.log("Connected to WebSocket");
-
+  
         stompClient.subscribe("/topic/scoreboard", (message) => {
           const updatedData = JSON.parse(message.body);
           console.log("Received WebSocket Update:", updatedData);
-
+  
           setScores(updatedData.scores || {});
           setTeams(updatedData.teams || {});
           setPlayers(updatedData.players || {});
-          setTime(updatedData.matchTime ?? 0); // Default time to 0 (shows "00:00")
+          setTime(updatedData.matchTime ?? 0);
           setTimerRunning(updatedData.timerRunning || false);
         });
       },
-      onStompError: (frame) => console.error("Stomp error:", frame),
+      onStompError: (frame) => console.error("STOMP Error:", frame),
     });
-
+  
     stompClient.activate();
-
+  
     return () => {
-      if (stompClient && stompClient.active) {
-        stompClient.deactivate().then(() =>
-          console.log("WebSocket Disconnected")
-        );
+      if (stompClient.active) {
+        stompClient.deactivate().then(() => console.log("WebSocket Disconnected"));
       }
     };
   }, []);
+  
 
-  // Keep-alive mechanism to prevent backend from sleeping
-  useEffect(() => {
-    const keepAliveInterval = setInterval(() => {
-      fetch("https://kabaddilivescoreboardbackend.onrender.com/keep-alive")
-        .catch((err) => console.error("Keep-alive failed", err));
-    }, 300000); // Every 5 minutes
-
-    return () => clearInterval(keepAliveInterval); // Cleanup on unmount
-  }, []);
+   
 
   const formatTime = (seconds) => {
     const min = Math.floor(seconds / 60);
