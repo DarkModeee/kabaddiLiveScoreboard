@@ -44,6 +44,7 @@ const UserPanel = () => {
         stompClient.deactivate().then(() => console.log("WebSocket Disconnected"));
       }
     };
+   
   }, []);
   
 
@@ -62,6 +63,7 @@ const UserPanel = () => {
         {/* Left Team */}
         <div className="team-box">
           <span>{teams.team1 || "Team 1"}</span>
+       
           <span className="badge">{scores[teams.team1] || 0}</span>
         </div>
 
