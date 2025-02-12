@@ -45,6 +45,16 @@ const UserPanel = () => {
     };
   }, []);
 
+  // Keep-alive mechanism to prevent backend from sleeping
+  useEffect(() => {
+    const keepAliveInterval = setInterval(() => {
+      fetch("https://kabaddilivescoreboardbackend.onrender.com/keep-alive")
+        .catch((err) => console.error("Keep-alive failed", err));
+    }, 300000); // Every 5 minutes
+
+    return () => clearInterval(keepAliveInterval); // Cleanup on unmount
+  }, []);
+
   const formatTime = (seconds) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;

@@ -21,53 +21,7 @@ const AdminPanel = () => {
       setScores(response.data.scores);
       setPlayers(response.data.players);
     } catch (error) {
-      alert("Error setting teams: " + error.message); // Show user-friendly error
-    }
-  };
-
-  const handleUpdateScore = async (team, delta) => {
-    try {
-      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/update-score", null, {
-        params: { team, delta },
-      });
-      setScores(response.data);
-    } catch (error) {
-      alert("Error updating score: " + error.message); // Show user-friendly error
-    }
-  };
-
-  const togglePlayerStatus = async (team, index) => {
-    try {
-      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/toggle-player", null, {
-        params: { team, index },
-      });
-      setPlayers(response.data.players);  // Sync player state with backend
-    } catch (error) {
-      alert("Error toggling player status: " + error.message); // Show user-friendly error
-    }
-  };
-
-  const handleTimeChange = (e) => {
-    setTime(parseInt(e.target.value) * 60);
-  };
-
-  const setTimer = async () => {
-    try {
-      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/set-timer", null, {
-        params: { minutes: time / 60 },
-      });
-      setTime(response.data.matchTime);
-    } catch (error) {
-      alert("Error setting timer: " + error.message); // Show user-friendly error
-    }
-  };
-
-  const toggleTimer = async () => {
-    try {
-      const response = await axios.post("https://kabaddilivescoreboardbackend.onrender.com/api/scoreboard/toggle-timer");
-      setTimerRunning(response.data.timerRunning);
-    } catch (error) {
-      alert("Error toggling timer: " + error.message); // Show user-friendly error
+      alert("Error setting teams: " + error.message);
     }
   };
 
@@ -80,8 +34,18 @@ const AdminPanel = () => {
       clearInterval(intervalRef.current);
     }
 
-    return () => clearInterval(intervalRef.current); // Cleanup on unmount or when timerRunning changes
+    return () => clearInterval(intervalRef.current);
   }, [timerRunning]);
+
+  // Keep-alive mechanism to prevent backend from sleeping
+  useEffect(() => {
+    const keepAliveInterval = setInterval(() => {
+      fetch("https://kabaddilivescoreboardbackend.onrender.com/keep-alive")
+        .catch((err) => console.error("Keep-alive failed", err));
+    }, 300000); // Every 5 minutes
+
+    return () => clearInterval(keepAliveInterval);
+  }, []);
 
   return (
     <div className="container mt-4">
@@ -96,38 +60,10 @@ const AdminPanel = () => {
 
       <div className="mb-4 p-3 border rounded shadow text-center">
         <h2>Match Timer</h2>
-        <input type="number" className="form-control mb-2"  onChange={handleTimeChange} />
-        <h3 className={timerRunning ? "text-success" : "text-danger"}>{Math.floor(time / 60)}:{(time % 60).toString().padStart(2, "0")}</h3>
-        <button className="btn btn-success" onClick={toggleTimer} disabled={timerRunning}>Start</button>
-        <button className="btn btn-danger" onClick={toggleTimer} disabled={!timerRunning}>Stop</button>
-        <button className="btn btn-info" onClick={setTimer}>Set Timer</button>
+        <h3 className={timerRunning ? "text-success" : "text-danger"}>
+          {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, "0")}
+        </h3>
       </div>
-
-      {[team1, team2].map((team) => (
-        <div key={team} className="mb-4 p-3 border rounded shadow">
-          <h3>{team}: <span className="badge bg-primary">{scores[team]}</span></h3>
-          <button className="btn btn-success me-2" onClick={() => handleUpdateScore(team, 1)}>+1</button>
-          <button className="btn btn-danger" onClick={() => handleUpdateScore(team, -1)}>-1</button>
-
-          <div className="mt-3">
-            <h5>Players</h5>
-            <div className="d-flex gap-2">
-              {players[team]?.map((active, index) => (
-               <BsPersonFill
-                 key={index}
-                 size={30}
-                 style={{
-                   cursor: "pointer",
-                   color: active ? "gray" : "red",
-                   border: index === 0 && active ? "2px solid green" : "none", // Highlight first player
-                 }}
-                 onClick={() => togglePlayerStatus(team, index)}
-               />
-              ))}
-            </div>
-          </div>
-        </div>
-      ))}
     </div>
   );
 };
