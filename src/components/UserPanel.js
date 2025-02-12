@@ -13,7 +13,7 @@ const UserPanel = () => {
   const [timerRunning, setTimerRunning] = useState(false);
 
   useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/scoreboard-websocket");
+    const socket = new SockJS("https://kabaddilivescoreboardbackend.onrender.com/scoreboard-websocket");
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: (str) => console.log(str),
